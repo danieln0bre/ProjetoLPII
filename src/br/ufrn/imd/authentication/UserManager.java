@@ -21,7 +21,7 @@ public class UserManager {
     private void saveUsersToFile(String USER_FILE_PATH) {
         try (FileWriter writer = new FileWriter(USER_FILE_PATH)) {
             for (User user : users) {
-                writer.write(user.getUserType() + "," + user.username + "," + user.password + "\n");
+                writer.write(user.getUserType() + "," + user.username + user.email + "," + user.password + "\n");
             }
         } catch (IOException e) {
             e.printStackTrace();
