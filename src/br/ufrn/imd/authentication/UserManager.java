@@ -1,7 +1,6 @@
 package br.ufrn.imd.authentication;
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class UserManager {
 	
