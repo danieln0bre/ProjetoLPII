@@ -15,6 +15,11 @@ public class CommonUser extends User {
 		
 	}
 	
+    @Override
+    public String getUserType() {
+        return "CommonUser";
+    }
+	
 	public void addDirectory() {
         // Cria uma instância do JFileChooser
         JFileChooser fileChooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());

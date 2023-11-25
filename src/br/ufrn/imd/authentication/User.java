@@ -11,6 +11,8 @@ public abstract class User {
 	protected int id;
 	protected boolean auth;
 	
+    public abstract String getUserType();
+	
 	public void setUsername(String username) {
 		this.username = username;
 	}
