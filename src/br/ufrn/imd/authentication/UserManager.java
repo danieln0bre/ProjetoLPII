@@ -39,10 +39,10 @@ public class UserManager {
                     String password = userData[2];
 
                     User user;
-                    if ("CommonUser".equals(userType)) {
+                    if ("VipUser".equals(userType)) {
+                    	user = new VipUser();
+                    } else{
                         user = new CommonUser();
-                    } else if ("VipUser".equals(userType)) {
-                        user = new VipUser();
                     }
 
                     user.username = username;
