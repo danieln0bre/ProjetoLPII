@@ -4,56 +4,53 @@ import java.util.ArrayList;
 
 public class UserManager {
 	
-    private ArrayList<User> users;
-    private static final String USER_FILE_PATH = "../../../../files/usuarios.txt";
+    private static final String USER_FILE_PATH = "./files/usuarios.txt";
+    
     
     public UserManager() {
-        this.users = new ArrayList<>();
-        loadUsersFromFile(USER_FILE_PATH );
-    }
-	
-    public void registerUser(User newUser) {
-        users.add(newUser);
-        saveUsersToFile(USER_FILE_PATH);
-    }
-	
-    // Método para salvar os usuários no arquivo usuarios.txt
-    private void saveUsersToFile(String USER_FILE_PATH) {
-        try (FileWriter writer = new FileWriter(USER_FILE_PATH)) {
-            for (User user : users) {
-                writer.write(user.getUserType() + "," + user.username + user.email + "," + user.password + "\n");
-            }
+        // Verifica se o arquivo de usuários existe e o cria se não existir
+        try {
+            FileWriter fileWriter = new FileWriter(USER_FILE_PATH, true);
+            fileWriter.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
     
-    public void loadUsersFromFile(String USER_FILE_PATH ) {
-        try (BufferedReader reader = new BufferedReader(new FileReader(USER_FILE_PATH ))) {
+    public void registerUser(String tipo, String nome, String email, String senha) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(USER_FILE_PATH, true))) {
+            // Escreve no arquivo no formato: tipo;nome;email;senha
+            writer.write(tipo + ";" + nome + ";" + email + ";" + senha);
+            writer.newLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public ArrayList<User> loadUsers() {
+        ArrayList<User> users = new ArrayList<>();
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(USER_FILE_PATH))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                String[] userData = line.split(",");
-                if (userData.length == 3) {
-                    String userType = userData[0];
-                    String username = userData[1];
-                    String password = userData[2];
+                String[] dados = line.split(";");
+                String type = dados[0];
+                String username = dados[1];
+                String email = dados[2];
+                String password = dados[3];
 
-                    User user;
-                    if ("VipUser".equals(userType)) {
-                    	user = new VipUser();
-                    } else{
-                        user = new CommonUser();
-                    }
-
-                    user.username = username;
-                    user.password = password;
-
-                    users.add(user);
+                if ("vip".equals(type)) {
+                	users.add(new VipUser(username, email, password));
+                } else if ("common".equals(type)) {
+                	users.add(new CommonUser(username, email, password));
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        return users;
     }
+    
 
 }

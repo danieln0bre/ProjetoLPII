@@ -6,13 +6,10 @@ import javax.swing.filechooser.FileSystemView;
 
 public class CommonUser extends User {
 	
-	CommonUser(String username, String email, String password, int id, boolean auth){
+	CommonUser(String username, String email, String password){
 		this.username = username;
 		this.email = email;
 		this.password = password;
-		this.id = id;
-		this.auth = auth;
-		
 	}
 	
     @Override
