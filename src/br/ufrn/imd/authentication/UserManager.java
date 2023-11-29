@@ -1,4 +1,5 @@
 package br.ufrn.imd.authentication;
+import java.util.Scanner;
 import java.io.*;
 import java.util.ArrayList;
 
@@ -6,6 +7,7 @@ public class UserManager {
     
     private static final String USER_FILE_PATH = "./files/usuarios.txt";
     private static final String USER_DIRECTORY_PATH = "./files/";
+    public boolean loggedIn;
 
     public UserManager() {
         // Verifica se o arquivo de usuários existe e o cria se não existir
@@ -18,6 +20,15 @@ public class UserManager {
     }
     
     public void registerUser(String tipo, String nome, String email, String senha) {
+        // Carrega os usuários existentes
+        ArrayList<User> users = loadUsers();
+
+        // Verifica se o nome de usuário ou e-mail já está em uso
+        if (isUsernameTaken(users, nome) || isEmailTaken(users, email)) {
+            System.err.println("Erro: Nome de usuário ou e-mail já em uso.");
+            return;
+        }
+
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(USER_FILE_PATH, true))) {
             // Escreve no arquivo no formato: tipo;nome;email;senha
             writer.write(tipo + ";" + nome + ";" + email + ";" + senha);
@@ -29,6 +40,48 @@ public class UserManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    // Métodos auxiliares para verificar se um nome de usuário ou e-mail já está em uso
+    private boolean isUsernameTaken(ArrayList<User> users, String username) {
+        for (User user : users) {
+            if (user.getUsername().equals(username)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isEmailTaken(ArrayList<User> users, String email) {
+        for (User user : users) {
+            if (user.getEmail().equals(email)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public void loginUser() {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Digite o nome de usuário:");
+        String username = scanner.nextLine();
+
+        System.out.println("Digite a senha:");
+        String password = scanner.nextLine();
+
+        ArrayList<User> users = loadUsers();
+
+        for (User user : users) {
+            if (user.getUsername().equals(username) && user.getPassword().equals(password)) {
+                user.setAuth(true);
+                System.out.println("Login bem-sucedido para o usuário: " + username);
+
+                return;
+            }
+        }
+
+        System.out.println("Login falhou. Verifique o nome de usuário e a senha.");
     }
 
     private void createDirectoryForUser(String username) {

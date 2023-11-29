@@ -8,7 +8,6 @@ public abstract class User {
 	protected String username;
 	protected String email;
 	protected String password;
-	protected int id;
 	protected boolean auth;
 	
     public abstract String getUserType();
@@ -37,14 +36,6 @@ public abstract class User {
 		return password;
 	}
 	
-	public void serId(int id) {
-		this.id = id;
-	}
-	
-	public int getId() {
-		return id;
-	}
-	
 	public void setAuth(boolean auth) {
 		this.auth = auth;
 	}
@@ -52,5 +43,4 @@ public abstract class User {
 	public boolean getAuth() {
 		return auth;
 	}
-	
 }

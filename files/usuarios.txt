@@ -1,8 +1,2 @@
 common;daniel;daniel@teste.com;teste
-common;daniel;daniel@teste.com;teste
-vip;gabriel;gabriel@teste.com;teste
-common;daniel;daniel@teste.com;teste
-vip;gabriel;gabriel@teste.com;testecommon;daniel;daniel@teste.com;teste
-vip;gabriel;gabriel@teste.com;teste
-common;daniel;daniel@teste.com;teste
 vip;gabriel;gabriel@teste.com;teste
