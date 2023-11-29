@@ -1,5 +1,8 @@
 package br.ufrn.imd.filehandling;
 
-public class IFileHandler {
+import java.util.ArrayList;
 
+public interface IFileHandler {
+	ArrayList<String> readData();
+    void writeData(ArrayList<String> data);
 }
