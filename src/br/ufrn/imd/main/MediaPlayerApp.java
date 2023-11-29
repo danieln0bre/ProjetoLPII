@@ -7,10 +7,11 @@ public class MediaPlayerApp {
 
 		new LoginGUI();
 		UserManager manager = new UserManager();
+		manager.loadUsers();
 		manager.registerUser("common", "daniel", "daniel@teste.com", "teste");
 		manager.registerUser("vip", "gabriel", "gabriel@teste.com", "teste");
-		manager.loadUsers();
 		System.out.println(manager.loadUsers());
+		manager.loginUser();
 	
 	}
 }
