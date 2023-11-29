@@ -68,7 +68,7 @@ public class RegisterGUI implements ActionListener {
         JLabel sucess = new JLabel("");
         sucess.setBounds(10,110,300,25);
         frame.add(sucess);
-        //sucess.setText("");
+        //sucess.setText("-");
 
         frame.setVisible(true);
     }
