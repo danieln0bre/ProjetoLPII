@@ -80,9 +80,9 @@ public class RegisterGUI extends JFrame implements ActionListener {
         goToLogin.addActionListener(this::retornar);
         add(goToLogin);
 
-        JLabel sucess = new JLabel("");
-        sucess.setBounds(10, 110, 300, 25);
-        add(sucess);
+        //JLabel sucess = new JLabel(" ");
+        //sucess.setBounds(10, 110, 300, 25);
+        //add(sucess);
         //sucess.setText("-");
 
         setVisible(true);

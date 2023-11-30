@@ -43,9 +43,9 @@ public class LoginGUI extends JFrame implements ActionListener {
         registerButton.addActionListener(this::registrar);
         add(registerButton);
 
-        JLabel sucess = new JLabel("");
-        sucess.setBounds(10,110,300,25);
-        add(sucess);
+        //JLabel sucess = new JLabel("");
+        //sucess.setBounds(10,110,300,25);
+        //add(sucess);
         //sucess.setText("");
 
         setVisible(true);

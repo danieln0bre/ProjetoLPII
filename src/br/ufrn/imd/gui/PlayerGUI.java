@@ -13,7 +13,7 @@ public class PlayerGUI /*extends JFrame implements ActionListener*/ {
 
     PlayerGUI(){
         JPanel panel = new JPanel();
-        setTitle("MediaPlayerApp");
+        setTitle(" MediaPlayerApp ");
         setSize(1000,800);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(null);
