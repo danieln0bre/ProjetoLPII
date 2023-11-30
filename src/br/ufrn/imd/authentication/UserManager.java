@@ -58,14 +58,7 @@ public class UserManager {
         return false;
     }
     
-    public void loginUser() {
-        Scanner scanner = new Scanner(System.in);
-
-        System.out.println("Digite o nome de usuário:");
-        String username = scanner.nextLine();
-
-        System.out.println("Digite a senha:");
-        String password = scanner.nextLine();
+    public void loginUser(String username, String password) {
 
         ArrayList<User> users = loadUsers();
 

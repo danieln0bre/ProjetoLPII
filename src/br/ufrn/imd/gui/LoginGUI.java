@@ -1,31 +1,52 @@
 package br.ufrn.imd.gui;
 import javax.swing.*;
-public class LoginGUI extends JFrame {
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import br.ufrn.imd.authentication.*;
+
+public class LoginGUI implements ActionListener {
+    JTextField userText;
+    JTextField passwordText;
     public LoginGUI(){
-        setTitle("MediaPlayerApp");
-        setVisible(true);
-        setSize(800,500);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
-        setLayout(null);
+        JFrame frame = new JFrame();
+        JPanel panel = new JPanel();
+        frame.setTitle("MediaPlayerApp");
+        frame.setSize(350,200);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.add(panel);
+        frame.setLayout(null);
 
-        JButton loginButton = new JButton("login");
-        JButton registerButton = new JButton("register");
-        JTextField loginField = new JTextField(20);
-        JPasswordField passwordField = new JPasswordField(20);
+        JLabel userLabel = new JLabel("User");
+        userLabel.setBounds(10,20,80,25);
+        frame.add(userLabel);
 
-        //loginButtonConfig
-        loginButton.setBounds(300,300,100,20);
+        userText = new JTextField();
+        userText.setBounds(100,20,165,25);
+        frame.add(userText);
 
-        //registerButtonConfig
-        registerButton.setBounds(400,300,100,20);
+        JLabel passwordLabel = new JLabel("Password");
+        passwordLabel.setBounds(10,50,80,25);
+        frame.add(passwordLabel);
 
-        //loginFieldConfig
-        loginField.setBounds(300,350,400,300);
-        //passwordFieldConfig
+        passwordText = new JPasswordField();
+        passwordText.setBounds(100,50,165,25);
+        frame.add(passwordText);
 
-        add(loginButton);
-        add(registerButton);
-        add(loginField);
+        JButton button = new JButton("Login");
+        button.setBounds(10,80,80,25);
+        button.addActionListener(this);
+        frame.add(button);
+
+        JLabel sucess = new JLabel("");
+        sucess.setBounds(10,110,300,25);
+        frame.add(sucess);
+        //sucess.setText("");
+
+        frame.setVisible(true);
+    }
+    @Override
+    public void actionPerformed(ActionEvent e){
+        UserManager manager = new UserManager();
+        manager.loginUsers(userText.getText(),passwordText.getText());
     }
 }
