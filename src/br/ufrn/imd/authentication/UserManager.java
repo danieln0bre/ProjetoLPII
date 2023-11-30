@@ -8,7 +8,6 @@ public class UserManager {
     
     private static final String USER_FILE_PATH = "./files/usuarios.txt";
     private static final String USER_DIRECTORY_PATH = "./files/";
-    public boolean loggedIn;
 
     public UserManager() {
         // Verifica se o arquivo de usuários existe e o cria se não existir
