@@ -6,8 +6,8 @@ import br.ufrn.imd.gui.*;
 public class MediaPlayerApp {
 	public static void main (String[] args) {
 
-		//new LoginGUI();
-		new RegisterGUI();
+		new LoginGUI();
+		//new RegisterGUI();
 		/*UserManager manager = new UserManager();
 		manager.loadUsers();
 		manager.registerUser("common", "daniel", "daniel@teste.com", "teste");
