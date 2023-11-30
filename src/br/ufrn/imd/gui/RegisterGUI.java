@@ -23,7 +23,7 @@ public class RegisterGUI extends JFrame implements ActionListener {
     public RegisterGUI() {
 
         JPanel panel = new JPanel();
-        setTitle("Register screen ");
+        setTitle("Register screen");
         setSize(350, 200);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
