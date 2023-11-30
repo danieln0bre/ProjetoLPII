@@ -47,6 +47,6 @@ public class LoginGUI implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e){
         UserManager manager = new UserManager();
-        manager.loginUsers(userText.getText(),passwordText.getText());
+        manager.loginUser(userText.getText(),passwordText.getText());
     }
 }

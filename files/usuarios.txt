@@ -1,3 +1,4 @@
 common;daniel;daniel@teste.com;teste
 vip;gabriel;gabriel@teste.com;teste
 common;username;asdas@gmail.com;123321
+vip;testandojr;testedasilva@teste.com;teste
