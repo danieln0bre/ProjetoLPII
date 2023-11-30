@@ -33,7 +33,7 @@ public class RegisterGUI implements ActionListener {
         emailLabel.setBounds(10,20,80,25);
         frame.add(emailLabel);
 
-        JTextField emailText = new JTextField();
+        emailText = new JTextField();
         emailText.setBounds(100,20,200,25);
         frame.add(emailText);
 
@@ -50,7 +50,7 @@ public class RegisterGUI implements ActionListener {
         passwordLabel.setBounds(10,80,80,25);
         frame.add(passwordLabel);
 
-        JPasswordField passwordText = new JPasswordField();
+        passwordText = new JPasswordField();
         passwordText.setBounds(100,80,200,25);
         frame.add(passwordText);
 
@@ -87,7 +87,6 @@ public class RegisterGUI implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e){
         UserManager manager = new UserManager();
-        manager.loadUsers();
         manager.registerUser(getUserType(), userText.getText(), emailText.getText(), passwordText.getText());
 
         System.out.println("Registrando...");
