@@ -4,13 +4,22 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import br.ufrn.imd.authentication.*;
 
 public class RegisterGUI implements ActionListener {
-    public boolean isVip = false;
+    private String userType = "common";
+    JTextField emailText;
+    JTextField userText;
+    JTextField passwordText;
 
-    public void setIsVip(boolean isVip) {
-        this.isVip = isVip;
+    public void setUserType(String userType) {
+        this.userType = userType;
     }
+
+    public String getUserType() {
+        return userType;
+    }
+
     public RegisterGUI(){
         JFrame frame = new JFrame();
         JPanel panel = new JPanel();
@@ -32,8 +41,9 @@ public class RegisterGUI implements ActionListener {
         userLabel.setBounds(10,50,80,25);
         frame.add(userLabel);
 
-        JTextField userText = new JTextField();
+        userText = new JTextField();
         userText.setBounds(100,50,200,25);
+        userText.setText("username");
         frame.add(userText);
 
         JLabel passwordLabel = new JLabel("Password");
@@ -56,9 +66,9 @@ public class RegisterGUI implements ActionListener {
             public void itemStateChanged(ItemEvent itemEvent) {
                 int state = itemEvent.getStateChange();
                 if(state == ItemEvent.SELECTED){
-                    setIsVip(true);
+                    setUserType("vip");
                 }else{
-                    setIsVip(false);
+                    setUserType("Common");
                 }
             }
         };
@@ -72,8 +82,14 @@ public class RegisterGUI implements ActionListener {
 
         frame.setVisible(true);
     }
+
+
     @Override
     public void actionPerformed(ActionEvent e){
+        UserManager manager = new UserManager();
+        manager.loadUsers();
+        manager.registerUser(getUserType(), userText.getText(), emailText.getText(), passwordText.getText());
+
         System.out.println("Registrando...");
     }
 }

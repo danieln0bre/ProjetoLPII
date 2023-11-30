@@ -2,8 +2,11 @@ package br.ufrn.imd.gui;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import br.ufrn.imd.authentication.*;
 
 public class LoginGUI implements ActionListener {
+    JTextField userText;
+    JTextField passwordText;
     public LoginGUI(){
         JFrame frame = new JFrame();
         JPanel panel = new JPanel();
@@ -17,7 +20,7 @@ public class LoginGUI implements ActionListener {
         userLabel.setBounds(10,20,80,25);
         frame.add(userLabel);
 
-        JTextField userText = new JTextField();
+        userText = new JTextField();
         userText.setBounds(100,20,165,25);
         frame.add(userText);
 
@@ -25,13 +28,13 @@ public class LoginGUI implements ActionListener {
         passwordLabel.setBounds(10,50,80,25);
         frame.add(passwordLabel);
 
-        JPasswordField passwordText = new JPasswordField();
+        passwordText = new JPasswordField();
         passwordText.setBounds(100,50,165,25);
         frame.add(passwordText);
 
         JButton button = new JButton("Login");
         button.setBounds(10,80,80,25);
-        //button.addActionListener(new LoginGUI());
+        button.addActionListener(this);
         frame.add(button);
 
         JLabel sucess = new JLabel("");
@@ -43,6 +46,8 @@ public class LoginGUI implements ActionListener {
     }
     @Override
     public void actionPerformed(ActionEvent e){
-
+        UserManager manager = new UserManager();
+        manager.loadUsers();
+        manager.loginUsers(userText.getText(),passwordText.getText());
     }
 }
