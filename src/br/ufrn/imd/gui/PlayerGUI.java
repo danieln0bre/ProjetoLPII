@@ -4,44 +4,55 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
+public class PlayerGUI extends JFrame implements ActionListener {
+    public StringBuffer directories = new StringBuffer();
 
-public class PlayerGUI /*extends JFrame implements ActionListener*/ {
-    //public ArrayList<String> directories;
-   /* public StringBuffer directories = new StringBuffer();
-
-    PlayerGUI(){
+    PlayerGUI() {
         JPanel panel = new JPanel();
-        setTitle(" MediaPlayerApp ");
-        setSize(1000,800);
+        setTitle("MediaPlayerApp");
+        setSize(1000, 800);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(null);
         setLocationRelativeTo(null);
         add(panel);
-        //TEMPORARIO
-        directories.append("POP");
-        directories.append("ROCK");
-        directories.append("SERTANEJO");
-        directories.append("MBP");
-        directories.append("FUNK");
-        directories.append("RAP");
-        //-------
-        JList listDirectories = new JList(directories);
+
+        // TEMPORÁRIO
+        /*adicionarDiretorio("ROCK ");
+        adicionarDiretorio("POP ");
+        adicionarDiretorio("FUNK ");
+        adicionarDiretorio("SERTANEJO ");
+        adicionarDiretorio("TRAP ");
+        adicionarDiretorio("RAP ");*/
+        for(int i = 0; i < 50; i++)
+        {
+            adicionarDiretorio("TEGELA ");
+        }
+        // -------
+
+        JList<String> listDirectories = new JList<>(directories.toString().split(" "));
+        listDirectories.setFont(new Font("Arial", Font.BOLD, 18));
         listDirectories.setVisibleRowCount(3);
-        listDirectories.setBounds(100,100,100,200);
-        add(BorderLayout.WEST,listDirectories);
+
+        JScrollPane listDirectoriesScroll = new JScrollPane(listDirectories);
+        // Ajuste a posição e o tamanho do JScrollPane
+        listDirectoriesScroll.setBounds(100, 100, 200, 200);
+        add(listDirectoriesScroll);
 
         setVisible(true);
-
     }
-    public boolean adicionarDiretorio(String path){
+
+    public boolean adicionarDiretorio(String path) {
         this.directories.append(path);
+        return true;
     }
 
     @Override
-    public void actionPerformed(ActionEvent e){
+    public void actionPerformed(ActionEvent e) {
         System.out.println("Hello World");
-    }*/
+    }
 
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> new PlayerGUI());
+    }
 }
