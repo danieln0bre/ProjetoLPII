@@ -1,0 +1,10 @@
+# Arquivos e pastas específicos do IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Arquivos do Eclipse
+.project
+.classpath
+.settings/
