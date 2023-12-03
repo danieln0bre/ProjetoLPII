@@ -1,45 +1,61 @@
 package br.ufrn.imd.authentication;
-import java.util.Scanner;
-import java.io.*;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import br.ufrn.imd.filehandling.UserFileHandler;
+import br.ufrn.imd.exceptions.AuthenticationException;
 
 public class UserManager {
-    
+
     private static final String USER_FILE_PATH = "./files/usuarios.txt";
     private static final String USER_DIRECTORY_PATH = "./files/";
 
     public UserManager() {
-        // Verifica se o arquivo de usuários existe e o cria se não existir
+        // Check if the user file exists and create it if it doesn't
         try {
             FileWriter fileWriter = new FileWriter(USER_FILE_PATH, true);
             fileWriter.close();
         } catch (IOException e) {
+            // Handle the IOException appropriately, log it or take corrective action
             e.printStackTrace();
         }
     }
-    
-    public void registerUser(String tipo, String nome, String email, String senha) {
-        // Carrega os usuários existentes
+
+    public void registerUser(String type, String username, String email, String password) {
+        // Load existing users
         ArrayList<User> users = loadUsers();
 
-        // Verifica se o nome de usuário ou e-mail já está em uso
-        if (isUsernameTaken(users, nome) || isEmailTaken(users, email)) {
-            System.err.println("Erro: Nome de usuário ou e-mail já em uso.");
+        // Check if the username or email is already in use
+        if (isUsernameTaken(users, username) || isEmailTaken(users, email)) {
+            System.err.println("Error: Username or email already in use.");
             return;
         }
 
         ArrayList<String> userData = new ArrayList<>();
-        userData.add(tipo + ";" + nome + ";" + email + ";" + senha);
+        userData.add(type + ";" + username + ";" + email + ";" + password);
 
         UserFileHandler userFileHandler = new UserFileHandler();
         userFileHandler.writeData(userData);
 
-        createDirectoryForUser(nome);
+        createDirectoryForUser(username);
     }
 
+    public void loginUser(String username, String password) throws AuthenticationException {
+        ArrayList<User> users = loadUsers();
 
-    // Métodos auxiliares para verificar se um nome de usuário ou e-mail já está em uso
+        for (User user : users) {
+            user.setAuth(false);
+            if (user.getUsername().equals(username) && user.getPassword().equals(password)) {
+                user.setAuth(true);
+                System.out.println("Successful login for user: " + username);
+                return;
+            }
+        }
+
+        throw new AuthenticationException("Login failed. Check the username and password.");
+    }
+
     private boolean isUsernameTaken(ArrayList<User> users, String username) {
         for (User user : users) {
             if (user.getUsername().equals(username)) {
@@ -57,23 +73,6 @@ public class UserManager {
         }
         return false;
     }
-    
-    public void loginUser(String username, String password) {
-
-        ArrayList<User> users = loadUsers();
-
-        for (User user : users) {
-        	user.setAuth(false);
-            if (user.getUsername().equals(username) && user.getPassword().equals(password)) {
-                user.setAuth(true);
-                System.out.println("Login bem-sucedido para o usuário: " + username);
-
-                return;
-            }
-        }
-
-        System.out.println("Login falhou. Verifique o nome de usuário e a senha.");
-    }
 
     private void createDirectoryForUser(String username) {
         String userDirectoryPath = USER_DIRECTORY_PATH + username;
@@ -81,9 +80,9 @@ public class UserManager {
         File userDirectory = new File(userDirectoryPath);
         if (!userDirectory.exists()) {
             if (userDirectory.mkdirs()) {
-                System.out.println("Diretório do usuário criado: " + userDirectoryPath);
+                System.out.println("User directory created: " + userDirectoryPath);
             } else {
-                System.err.println("Falha ao criar diretório do usuário: " + userDirectoryPath);
+                System.err.println("Failed to create user directory: " + userDirectoryPath);
             }
         }
     }
@@ -95,22 +94,22 @@ public class UserManager {
         ArrayList<User> users = new ArrayList<>();
 
         for (String line : userLines) {
-            String[] dados = line.split(";");
+            String[] data = line.split(";");
             
-            // Verifica se há pelo menos 4 elementos no array antes de acessar os índices
-            if (dados.length >= 4) {
-                String type = dados[0];
-                String username = dados[1];
-                String email = dados[2];
-                String password = dados[3];
+            // Check if there are at least 4 elements in the array before accessing the indices
+            if (data.length >= 4) {
+                String type = data[0];
+                String username = data[1];
+                String email = data[2];
+                String userPassword = data[3];
 
                 if ("vip".equals(type)) {
-                    users.add(new VipUser(username, email, password));
+                    users.add(new VipUser(username, email, userPassword));
                 } else if ("common".equals(type)) {
-                    users.add(new CommonUser(username, email, password));
+                    users.add(new CommonUser(username, email, userPassword));
                 }
             } else {
-                System.err.println("Erro: Linha do arquivo não contém informações suficientes: " + line);
+                System.err.println("Error: Line in the file does not contain enough information: " + line);
             }
         }
 
