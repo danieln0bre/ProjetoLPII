@@ -1,5 +1,14 @@
 package br.ufrn.imd.exceptions;
 
-public class PlaylistException {
+public class PlaylistException extends Exception {
 
+    private static final long serialVersionUID = 3L;
+
+	public PlaylistException(String message) {
+        super(message);
+    }
+
+    public PlaylistException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }
