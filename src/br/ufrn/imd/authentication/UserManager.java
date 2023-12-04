@@ -115,4 +115,16 @@ public class UserManager {
 
         return users;
     }
+    
+    public boolean isUserVip(String username) {
+        ArrayList<User> users = loadUsers();
+
+        for (User user : users) {
+            if (user.getUsername().equals(username) && user.getUserType().equals("VipUser")) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
