@@ -81,11 +81,26 @@ public class UserManager {
         if (!userDirectory.exists()) {
             if (userDirectory.mkdirs()) {
                 System.out.println("User directory created: " + userDirectoryPath);
+
+                String diretoriosFilePath = userDirectoryPath + "/diretorios.txt";
+                File diretoriosFile = new File(diretoriosFilePath);
+                
+                try {
+                    if (diretoriosFile.createNewFile()) {
+                        System.out.println("Arquivo de diretórios criado: " + diretoriosFilePath);
+                    } else {
+                        System.err.println("Falha ao criar arquivo de diretorios: " + diretoriosFilePath);
+                    }
+                } catch (IOException e) {
+                    System.err.println("Erro ai criar arquivo de diretorios: " + e.getMessage());
+                }
+
             } else {
-                System.err.println("Failed to create user directory: " + userDirectoryPath);
+                System.err.println("Falha ao criar diretorio de usuario: " + userDirectoryPath);
             }
         }
     }
+
 
     public ArrayList<User> loadUsers() {
         UserFileHandler userFileHandler = new UserFileHandler();
