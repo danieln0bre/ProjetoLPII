@@ -1,7 +1,7 @@
 package br.ufrn.imd.exceptions;
 
-public class FileHandlingException extends Exception {
-	
+public class FileHandlingException extends MediaPlayerException {
+
     private static final long serialVersionUID = 2L;
 
     public FileHandlingException() {

@@ -1,9 +1,11 @@
 package br.ufrn.imd.authentication;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import br.ufrn.imd.filehandling.UserFileHandler;
+import br.ufrn.imd.filehandling.DirectoriesFileHandler;
 import br.ufrn.imd.exceptions.AuthenticationException;
 
 public class UserManager {
@@ -17,7 +19,7 @@ public class UserManager {
             FileWriter fileWriter = new FileWriter(USER_FILE_PATH, true);
             fileWriter.close();
         } catch (IOException e) {
-            // Handle the IOException appropriately, log it or take corrective action
+            // Handle the IOException appropriately, log it, or take corrective action
             e.printStackTrace();
         }
     }
@@ -39,9 +41,13 @@ public class UserManager {
         userFileHandler.writeData(userData);
 
         createDirectoryForUser(username);
+
+        // Pass the username to DirectoriesFileHandler
+        DirectoriesFileHandler directoriesFileHandler = new DirectoriesFileHandler(username);
+        directoriesFileHandler.writeData(new ArrayList<>()); // You can pass actual data if needed
     }
 
-    public void loginUser(String username, String password) throws AuthenticationException {
+    public User loginUser(String username, String password) throws AuthenticationException {
         ArrayList<User> users = loadUsers();
 
         for (User user : users) {
@@ -49,7 +55,7 @@ public class UserManager {
             if (user.getUsername().equals(username) && user.getPassword().equals(password)) {
                 user.setAuth(true);
                 System.out.println("Successful login for user: " + username);
-                return;
+                return user;  // Return the authenticated user object
             }
         }
 
@@ -84,7 +90,7 @@ public class UserManager {
 
                 String diretoriosFilePath = userDirectoryPath + "/diretorios.txt";
                 File diretoriosFile = new File(diretoriosFilePath);
-                
+
                 try {
                     if (diretoriosFile.createNewFile()) {
                         System.out.println("Arquivo de diretórios criado: " + diretoriosFilePath);
@@ -92,7 +98,7 @@ public class UserManager {
                         System.err.println("Falha ao criar arquivo de diretorios: " + diretoriosFilePath);
                     }
                 } catch (IOException e) {
-                    System.err.println("Erro ai criar arquivo de diretorios: " + e.getMessage());
+                    System.err.println("Erro ao criar arquivo de diretorios: " + e.getMessage());
                 }
 
             } else {
@@ -100,7 +106,6 @@ public class UserManager {
             }
         }
     }
-
 
     public ArrayList<User> loadUsers() {
         UserFileHandler userFileHandler = new UserFileHandler();
@@ -130,7 +135,7 @@ public class UserManager {
 
         return users;
     }
-    
+
     public boolean isUserVip(User user) {
         ArrayList<User> users = loadUsers();
 

@@ -16,10 +16,10 @@ public class MediaPlayerApp {
 		System.out.println(manager.loadUsers());
 		manager.loginUser();*/
 		
-        String filePath = "/home/daniel/eclipse-workspace/ProjetoLPII/teste/HINO.mp3";
+        //String filePath = "/home/daniel/eclipse-workspace/ProjetoLPII/teste/HINO.mp3";
 
-        AudioPlayer audioPlayer = new AudioPlayer(filePath);
-        audioPlayer.play();
+        //AudioPlayer audioPlayer = new AudioPlayer(filePath);
+       // audioPlayer.play();
 
         // Sleep for a while to allow the player to start playing
         try {

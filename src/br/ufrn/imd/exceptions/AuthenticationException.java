@@ -1,8 +1,6 @@
 package br.ufrn.imd.exceptions;
 
-import java.io.Serializable;
-
-public class AuthenticationException extends Exception implements Serializable {
+public class AuthenticationException extends MediaPlayerException {
 
     private static final long serialVersionUID = 1L;
 
