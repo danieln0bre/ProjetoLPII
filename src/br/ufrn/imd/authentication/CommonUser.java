@@ -8,7 +8,6 @@ import javax.swing.filechooser.FileSystemView;
 
 public class CommonUser extends User {
 
-    // Assuming this path is only for initialization and will be updated during runtime
     private String userDirectoryPath = "./files/";
 
     public CommonUser(String username, String email, String password) {
@@ -31,10 +30,8 @@ public class CommonUser extends User {
             String selectedDirectory = fileChooser.getSelectedFile().getAbsolutePath();
             System.out.println("Selected directory: " + selectedDirectory);
 
-            // Set the selected directory as the user's directory
             this.userDirectoryPath = selectedDirectory;
 
-            // Call the method to update the diretorios.txt file
             updateDirectoriesFile();
         } else {
             System.out.println("No directory selected.");
@@ -45,10 +42,8 @@ public class CommonUser extends User {
         DirectoriesFileHandler directoriesFileHandler = new DirectoriesFileHandler(this.username);
         ArrayList<String> directoriesData = directoriesFileHandler.readData();
 
-        // Add the user's directory path to the data
         directoriesData.add(this.userDirectoryPath);
 
-        // Write the updated data back to the file
         directoriesFileHandler.writeData(directoriesData);
     }
 

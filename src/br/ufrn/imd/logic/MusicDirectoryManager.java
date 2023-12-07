@@ -5,7 +5,7 @@ import br.ufrn.imd.authentication.CommonUser;
 
 import java.util.ArrayList;
 
-class MusicDirectoriesManager {
+public class MusicDirectoryManager {
 
     public void addMusicDirectory(CommonUser user, String directoryPath) {
         // Get the existing directories for the user

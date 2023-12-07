@@ -9,9 +9,9 @@ import br.ufrn.imd.filehandling.DirectoriesFileHandler;
 import br.ufrn.imd.exceptions.AuthenticationException;
 
 public class UserManager {
-
     private static final String USER_FILE_PATH = "./files/usuarios.txt";
     private static final String USER_DIRECTORY_PATH = "./files/";
+    private User loggedUser; // Added loggedUser attribute
 
     public UserManager() {
         // Check if the user file exists and create it if it doesn't
@@ -54,12 +54,17 @@ public class UserManager {
             user.setAuth(false);
             if (user.getUsername().equals(username) && user.getPassword().equals(password)) {
                 user.setAuth(true);
+                this.loggedUser = user; // Set the loggedUser attribute
                 System.out.println("Successful login for user: " + username);
-                return user;  // Return the authenticated user object
+                return user;
             }
         }
 
         throw new AuthenticationException("Login failed. Check the username and password.");
+    }
+
+    public User getLoggedUser() {
+        return loggedUser;
     }
 
     private boolean isUsernameTaken(ArrayList<User> users, String username) {
@@ -115,7 +120,7 @@ public class UserManager {
 
         for (String line : userLines) {
             String[] data = line.split(";");
-            
+
             // Check if there are at least 4 elements in the array before accessing the indices
             if (data.length >= 4) {
                 String type = data[0];

@@ -5,10 +5,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import br.ufrn.imd.authentication.*;
 import br.ufrn.imd.exceptions.AuthenticationException;
+import br.ufrn.imd.gui.*;
 
 public class LoginGUI extends JFrame implements ActionListener {
     JTextField userText;
     JTextField passwordText;
+    private User user; // Adicionando o campo User
 
     public LoginGUI() {
         JPanel panel = new JPanel();
@@ -57,8 +59,12 @@ public class LoginGUI extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         UserManager manager = new UserManager();
         try {
-            manager.loginUser(userText.getText(), passwordText.getText());
-            PlayerGUI playerGUI = new PlayerGUI();
+            user = manager.loginUser(userText.getText(), passwordText.getText());
+
+            // Crie uma instância da MainGUI e passe o objeto do usuário logado (se necessário)
+            MainGUI mainGUI = new MainGUI(user);
+
+            // Feche a janela de login
             this.dispose();
         } catch (AuthenticationException ex) {
             JOptionPane.showMessageDialog(this, "Login failed. Check the username and password.", "Login Error", JOptionPane.ERROR_MESSAGE);

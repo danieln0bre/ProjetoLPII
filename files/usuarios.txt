@@ -3,3 +3,5 @@ vip;gabriel;gabriel@teste.com;teste
 common;username;asdas@gmail.com;123321
 vip;testandojr;testedasilva@teste.com;teste
 common;testando;teste@hotmail.com;teste
+vip;teste2;teste@gmail.com;teste2
+vip;email;email@gmail.com;teste
