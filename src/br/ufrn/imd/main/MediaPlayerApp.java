@@ -1,24 +1,33 @@
 package br.ufrn.imd.main;
-
-import javax.swing.SwingUtilities;
+//import br.ufrn.imd.authentication.UserManager;
 import br.ufrn.imd.gui.*;
+//import br.ufrn.imd.gui.RegisterGUI;
+import br.ufrn.imd.logic.AudioPlayer;
 
 public class MediaPlayerApp {
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            // Crie uma instância de MainGUI
+	public static void main (String[] args) {
 
+		new LoginGUI();
+		//new RegisterGUI();
+		/*UserManager manager = new UserManager();
+		manager.loadUsers();
+		manager.registerUser("common", "daniel", "daniel@teste.com", "teste");
+		manager.registerUser("vip", "gabriel", "gabriel@teste.com", "teste");
+		System.out.println(manager.loadUsers());
+		manager.loginUser();*/
+		
+        //String filePath = "/home/daniel/eclipse-workspace/ProjetoLPII/teste/HINO.mp3";
+        //String filePath = "../../../../../teste/HINO.mp3";
 
-            // Crie uma instância de LoginGUI e configure a MainGUI no construtor
-            LoginGUI loginGUI = new LoginGUI();
-            
-            //inicializar tela (login)
-            //login leva pra mainGUI(passando o objeto do usuario logado), maingui deve ter 2 botoes para acessar as telas de player e playlist
-            //se o usuario for vip, maingui pode levar para playlist gui passando o objeto do usuario logado
-            //por padrao pode acessar o playergui, pasasndo o objeto do usuario logado
-            //playergui o usuario pode adicionar diretorios ou selecionar musica em um diretorio
-            //playlist gui o usuario pode adicionar musica a playlist, remover musica da playlist ou tocar uma playlist
+        //AudioPlayer audioPlayer = new AudioPlayer(filePath);
+        //audioPlayer.play();
 
-        });
-    }
+        // Sleep for a while to allow the player to start playing
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+	
+	}
 }
