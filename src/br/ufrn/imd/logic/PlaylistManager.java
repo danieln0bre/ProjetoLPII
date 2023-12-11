@@ -115,4 +115,44 @@ public class PlaylistManager {
             }
         }
     }
+    
+    public ArrayList<String> loadUserPlaylists(User user) {
+    	ArrayList<String> userPlaylists = new ArrayList<>();
+        String userPlaylistDirectory = PLAYLIST_DIRECTORY_BASE + user.getUsername() + "/playlists/";
+
+        File userDirectory = new File(userPlaylistDirectory);
+        if (userDirectory.exists() && userDirectory.isDirectory()) {
+            File[] playlistFiles = userDirectory.listFiles();
+            if (playlistFiles != null) {
+                for (File playlistFile : playlistFiles) {
+                    userPlaylists.add(playlistFile.getName());
+                }
+            }
+        }
+
+        return userPlaylists;
+    }
+    
+    public ArrayList<String> getPlaylistSongs(User user, String playlistName) {
+    	ArrayList<String> playlistSongs = new ArrayList<>();
+
+        try {
+            String playlistDirectoryPath = PLAYLIST_DIRECTORY_BASE + user.getUsername() + "/playlists/";
+            String playlistFilePath = playlistDirectoryPath + "playlist_" + playlistName + ".txt";
+
+            PlaylistFileHandler playlistFileHandler = new PlaylistFileHandler(playlistFilePath);
+
+            // Exemplo de leitura de um arquivo de playlist
+            ArrayList<String> playlistData = playlistFileHandler.readData();
+
+            // Adiciona as músicas da playlist à lista
+            playlistSongs.addAll(playlistData);
+        } catch (PlaylistException e) {
+            System.err.println("Error getting playlist songs: " + e.getMessage());
+        }
+
+        return playlistSongs;
+    }
+    
+    
 }
