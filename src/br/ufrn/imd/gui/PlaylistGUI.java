@@ -10,7 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-public class PlaylistGUI extends JFrame implements ActionListener {
+public class PlaylistGUI extends JPanel implements ActionListener {
     private User user;
     private PlaylistManager playlistManager;
     private DefaultListModel<String> playlistListModel;
@@ -23,10 +23,6 @@ public class PlaylistGUI extends JFrame implements ActionListener {
     }
 
     private void initializeUI() {
-        setTitle("Playlist Screen");
-        setSize(400, 300);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
         // Botão para carregar playlists
@@ -61,12 +57,6 @@ public class PlaylistGUI extends JFrame implements ActionListener {
 
         add(buttonPanel, BorderLayout.SOUTH);
 
-        // Botão para voltar para MainGUI
-        JButton backButton = new JButton("Voltar para MainGUI");
-        backButton.addActionListener(this::backToMainGUI);
-        add(backButton, BorderLayout.SOUTH);
-
-        setVisible(true);
     }
 
     private void loadPlaylists(ActionEvent e) {
@@ -140,11 +130,6 @@ public class PlaylistGUI extends JFrame implements ActionListener {
         }
     }
 
-    private void backToMainGUI(ActionEvent e) {
-        MainGUI mainGUI = new MainGUI(user);
-        this.dispose(); // Fecha a janela atual
-    }
-
     @Override
     public void actionPerformed(ActionEvent e) {
         // Implemente a lógica para lidar com outros eventos, se necessário
@@ -152,6 +137,13 @@ public class PlaylistGUI extends JFrame implements ActionListener {
 
     public static void main(String[] args) {
         User loggedUser = new CommonUser("username", "email", "password");
-        SwingUtilities.invokeLater(() -> new PlaylistGUI(loggedUser));
+        SwingUtilities.invokeLater(() -> {
+            JFrame frame = new JFrame();
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.getContentPane().add(new PlaylistGUI(loggedUser));
+            frame.pack();
+            frame.setLocationRelativeTo(null);
+            frame.setVisible(true);
+        });
     }
 }

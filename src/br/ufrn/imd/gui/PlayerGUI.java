@@ -6,10 +6,11 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+
 import br.ufrn.imd.authentication.*;
 import br.ufrn.imd.logic.*;
 
-public class PlayerGUI extends JFrame implements ActionListener {
+public class PlayerGUI extends JPanel implements ActionListener {
     private static User user;
     private JList<String> listDirectories;
     private DefaultListModel<String> listModel;
@@ -18,15 +19,11 @@ public class PlayerGUI extends JFrame implements ActionListener {
 
     public PlayerGUI(User user) {
         this.user = user;
+        initializeUI();
+    }
 
-        setTitle("MediaPlayerApp");
-        setSize(1000, 800);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    private void initializeUI() {
         setLayout(null);
-        setLocationRelativeTo(null);
-
-        JPanel panel = new JPanel();
-        add(panel);
 
         this.listModel = new DefaultListModel<String>();
 
@@ -45,46 +42,30 @@ public class PlayerGUI extends JFrame implements ActionListener {
         listDirectoryFiles.setVisibleRowCount(3);
         listDirectories.addListSelectionListener(this::valueChanged);
 
-
-
         JScrollPane listDirectorySongs = new JScrollPane(listDirectoryFiles);
-        listDirectorySongs.setBounds(500,125,300,500);
+        listDirectorySongs.setBounds(500, 125, 300, 500);
         add(listDirectorySongs);
 
         JLabel directoriesLabel = new JLabel("Directories");
-        directoriesLabel.setBounds(230,100,140,30);
-        directoriesLabel.setFont(new Font("Arial",Font.BOLD,20));
+        directoriesLabel.setBounds(230, 100, 140, 30);
+        directoriesLabel.setFont(new Font("Arial", Font.BOLD, 20));
         add(directoriesLabel);
 
         JLabel songsLabel = new JLabel("Songs");
-        songsLabel.setBounds(600,100,100,30);
-        songsLabel.setFont(new Font("Arial",Font.BOLD,20));
+        songsLabel.setBounds(600, 100, 100, 30);
+        songsLabel.setFont(new Font("Arial", Font.BOLD, 20));
         add(songsLabel);
 
         JButton addDirectoryButton = new JButton("+");
-        addDirectoryButton.setBounds(100,100,50,50);
+        addDirectoryButton.setBounds(100, 100, 50, 50);
         addDirectoryButton.addActionListener(this::addDirectory);
         add(addDirectoryButton);
 
-        JButton backButton = new JButton("Voltar para MainGUI");
-        backButton.setBounds(120, 350, 160, 25);
-        backButton.addActionListener(this::backToMainGUI);
-        add(backButton);
 
         JButton playButton = new JButton("Tocar Música");
-        playButton.setBounds(410,650,140,30);
+        playButton.setBounds(410, 650, 140, 30);
         playButton.addActionListener(this::playMusic);
         add(playButton);
-
-
-
-        setVisible(true);
-    }
-
-
-    private void backToMainGUI(ActionEvent e) {
-        MainGUI mainGUI = new MainGUI(user);
-        this.dispose();
     }
 
     private void addDirectory(ActionEvent e) {
@@ -154,7 +135,12 @@ public class PlayerGUI extends JFrame implements ActionListener {
         SwingUtilities.invokeLater(() -> {
             // Supondo que você tenha um objeto de usuário (substitua isso com seu próprio código de obtenção de usuário)
             User loggedUser = new CommonUser(user.getUsername(), user.getEmail(), user.getPassword());
-            new PlayerGUI(user);
+            JFrame frame = new JFrame();
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.getContentPane().add(new PlayerGUI(loggedUser));
+            frame.pack();
+            frame.setLocationRelativeTo(null);
+            frame.setVisible(true);
         });
     }
 }
