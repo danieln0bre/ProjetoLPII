@@ -54,23 +54,22 @@ public class LoginGUI extends JFrame implements ActionListener {
         RegisterGUI registerGUI = new RegisterGUI();
         this.dispose();
     }
+    
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        UserManager manager = new UserManager();
+        UserManager manager = UserManager.getInstance(); // Obtenha a instância compartilhada
         try {
-            user = manager.loginUser(userText.getText(), passwordText.getText());
+            User loggedUser = manager.loginUser(userText.getText(), passwordText.getText());
+            manager.setLoggedUser(loggedUser); // Atualize o usuário logado no UserManager
 
-            // Crie uma instância da MainGUI e passe o objeto do usuário logado (se necessário)
-            MainGUI mainGUI = new MainGUI(user);
-
-            // Feche a janela de login
-            this.dispose();
+            // Crie uma instância da MainGUI e passe o objeto do usuário logado
+            MainGUI mainGUI = new MainGUI();
+            this.dispose(); // Feche a janela de login
         } catch (AuthenticationException ex) {
             JOptionPane.showMessageDialog(this, "Login failed. Check the username and password.", "Login Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new LoginGUI());
     }

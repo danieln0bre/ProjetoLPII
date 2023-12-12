@@ -13,6 +13,8 @@ public class UserManager {
     private static final String USER_DIRECTORY_PATH = "./files/";
     private User loggedUser; // Added loggedUser attribute
 
+    private static UserManager instance;
+
     public UserManager() {
         // Check if the user file exists and create it if it doesn't
         try {
@@ -22,6 +24,13 @@ public class UserManager {
             // Handle the IOException appropriately, log it, or take corrective action
             e.printStackTrace();
         }
+    }
+
+    public static UserManager getInstance() {
+        if (instance == null) {
+            instance = new UserManager();
+        }
+        return instance;
     }
 
     public void registerUser(String type, String username, String email, String password) {
@@ -65,6 +74,10 @@ public class UserManager {
 
     public User getLoggedUser() {
         return loggedUser;
+    }
+    
+    public void setLoggedUser(User user) {
+    	this.loggedUser = user;
     }
 
     private boolean isUsernameTaken(ArrayList<User> users, String username) {

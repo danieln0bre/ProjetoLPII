@@ -2,19 +2,21 @@ package br.ufrn.imd.gui;
 
 import javax.swing.*;
 
-import java.awt.BorderLayout;
-import java.awt.CardLayout;
+import br.ufrn.imd.authentication.User;
+import br.ufrn.imd.authentication.UserManager;
+import br.ufrn.imd.authentication.VipUser;
+
+import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import br.ufrn.imd.authentication.*;
 
 public class MainGUI extends JFrame {
-    private static User user;
+    private static final long serialVersionUID = 1L;
+    private UserManager userManager;
     private JPanel cardPanel;
     private CardLayout cardLayout;
 
-    public MainGUI(User user) {
-        this.user = user;
+    public MainGUI() {
+        userManager = UserManager.getInstance();
 
         setTitle("Main Screen");
         setSize(800, 600);
@@ -25,37 +27,53 @@ public class MainGUI extends JFrame {
         cardLayout = new CardLayout();
         cardPanel.setLayout(cardLayout);
 
-        // Adicione PlayerGUI ao CardLayout
-        PlayerGUI playerGUI = new PlayerGUI(user);
-        cardPanel.add(playerGUI, "Player");
-
-        // Adicione PlaylistGUI ao CardLayout
-        PlaylistGUI playlistGUI = new PlaylistGUI(user);
-        cardPanel.add(playlistGUI, "Playlist");
-
-        // Adicione o CardLayout ao contentPane
-        getContentPane().add(cardPanel);
-
-        // Adicione botões para alternar entre as "cartas"
         JButton playerButton = new JButton("Player");
-        playerButton.addActionListener(e -> cardLayout.show(cardPanel, "Player"));
+        playerButton.addActionListener(this::showPlayer);
 
         JButton playlistButton = new JButton("Playlist");
-        playlistButton.addActionListener(e -> cardLayout.show(cardPanel, "Playlist"));
+        playlistButton.addActionListener(this::showPlaylist);
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.add(playerButton);
-        buttonPanel.add(playlistButton);
 
+        // Adiciona o botão de playlist apenas se o usuário logado for um VipUser
+        if (userManager.getLoggedUser() instanceof VipUser) {
+            buttonPanel.add(playlistButton);
+        }
+
+        getContentPane().setLayout(new BorderLayout());
+        getContentPane().add(cardPanel, BorderLayout.CENTER);
         getContentPane().add(buttonPanel, BorderLayout.NORTH);
+
+        // Mostra o PlayerGUI por padrão ao inicializar
+        showPlayer(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "default"));
 
         setVisible(true);
     }
 
+    private void showPlayer(ActionEvent e) {
+        PlayerGUI playerGUI = new PlayerGUI(userManager.getLoggedUser());
+        cardPanel.add(playerGUI, "Player");
+        cardLayout.show(cardPanel, "Player");
+    }
+
+    private void showPlaylist(ActionEvent e) {
+        // Obtém o usuário atualmente logado
+        User loggedUser = userManager.getLoggedUser();
+
+        // Verifica se o usuário logado é um VipUser
+        if (loggedUser instanceof VipUser) {
+            // Se for um VipUser, mostra a PlaylistGUI
+            PlaylistGUI playlistGUI = new PlaylistGUI(loggedUser);
+            cardPanel.add(playlistGUI, "Playlist");
+            cardLayout.show(cardPanel, "Playlist");
+        } else {
+            // Se não for um VipUser, exibe uma mensagem ou lida de acordo com os requisitos
+            JOptionPane.showMessageDialog(this, "Acesso restrito. Somente usuários VIP podem acessar a Playlist.");
+        }
+    }
+
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            User loggedUser = new CommonUser(user.getUsername(), user.getEmail(), user.getPassword());
-            new MainGUI(loggedUser);
-        });
+        SwingUtilities.invokeLater(MainGUI::new);
     }
 }
