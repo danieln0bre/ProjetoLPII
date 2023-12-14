@@ -154,7 +154,7 @@ public class PlaylistGUI extends JPanel implements ActionListener {
 
     private void playPlaylist(ActionEvent e) {
     	String selectedPlaylist = playlistList.getSelectedValue();
-        this.audioPlayer = new AudioPlayer("./files/"+user.getUsername()+"/playlists/"+selectedPlaylist);
+        this.audioPlayer = new AudioPlayer("./files/"+user.getUsername()+"/playlists/"+selectedPlaylist, true);
         Thread playThread = new Thread(() -> {
             audioPlayer.playPlaylist();
         });

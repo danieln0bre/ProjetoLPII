@@ -1,1 +1,3 @@
 /home/daniel/eclipse-workspace/ProjetoLPII/teste/HINO.mp3
+/home/daniel/eclipse-workspace/ProjetoLPII/teste/HINO2.mp3
+/home/daniel/eclipse-workspace/ProjetoLPII/teste/HINO3.mp3

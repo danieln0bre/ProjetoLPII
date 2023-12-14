@@ -1,11 +1,9 @@
 package br.ufrn.imd.logic;
 
-import javazoom.jl.decoder.JavaLayerException;
-import javazoom.jl.player.advanced.AdvancedPlayer;
-import javazoom.jl.player.advanced.PlaybackEvent;
-import javazoom.jl.player.advanced.PlaybackListener;
 import br.ufrn.imd.filehandling.PlaylistFileHandler;
 import br.ufrn.imd.exceptions.PlaylistException;
+import javazoom.jl.decoder.JavaLayerException;
+import javazoom.jl.player.advanced.AdvancedPlayer;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -13,15 +11,32 @@ import java.util.ArrayList;
 
 public class AudioPlayer {
     private AdvancedPlayer player;
-    private PlaylistFileHandler playlistFileHandler;
+    private ArrayList<String> playlist;
 
-    public AudioPlayer(String filePath) {
+    
+    public AudioPlayer(String filePath, boolean isPlaylist) {
         try {
-            FileInputStream fileInputStream = new FileInputStream(filePath);
-            player = new AdvancedPlayer(fileInputStream);
-            playlistFileHandler = new PlaylistFileHandler(filePath);
-        } catch (JavaLayerException | IOException e) {
+            if (isPlaylist) {
+                this.playlist = loadPlaylist(filePath);
+                if (!this.playlist.isEmpty()) {
+                    FileInputStream fileInputStream = new FileInputStream(this.playlist.get(0));
+                    this.player = new AdvancedPlayer(fileInputStream);
+                }
+            } else {
+                FileInputStream fileInputStream = new FileInputStream(filePath);
+                player = new AdvancedPlayer(fileInputStream);
+            }
+        } catch (JavaLayerException | IOException | PlaylistException e) {
             e.printStackTrace();
+        }
+    }
+
+    private ArrayList<String> loadPlaylist(String playlistFilePath) throws PlaylistException {
+        try {
+            PlaylistFileHandler playlistFileHandler = new PlaylistFileHandler(playlistFilePath);
+            return playlistFileHandler.readData();
+        } catch (PlaylistException e) {
+            throw new PlaylistException("Error loading playlist.", e);
         }
     }
 
@@ -40,33 +55,20 @@ public class AudioPlayer {
     }
 
     public void playPlaylist() {
-        // Method to play the songs from the playlist
-        Thread playlistThread = new Thread(() -> {
-            try {
-                ArrayList<String> playlist = playlistFileHandler.readData();
-                for (String track : playlist) {
-                    playTrack(track);
-                }
-            } catch (PlaylistException e) {
-                e.printStackTrace();
-            }
-        });
-        playlistThread.start();
-    }
-
-    private void playTrack(String trackPath) {
-        try {
-            player.close();
-            player = new AdvancedPlayer(new FileInputStream(trackPath));
-            player.setPlayBackListener(new PlaybackListener() {
-                @Override
-                public void playbackFinished(PlaybackEvent evt) {
-                    // You can add logic here if needed
+        if (player != null && playlist != null && !playlist.isEmpty()) {
+            // Start the playlist player in a new thread
+            Thread playlistThread = new Thread(() -> {
+                try {
+                    for (String filePath : playlist) {
+                        FileInputStream fileInputStream = new FileInputStream(filePath);
+                        player = new AdvancedPlayer(fileInputStream);
+                        player.play();
+                    }
+                } catch (JavaLayerException | IOException e) {
+                    e.printStackTrace();
                 }
             });
-            play();
-        } catch (JavaLayerException | IOException e) {
-            e.printStackTrace();
+            playlistThread.start();
         }
     }
 

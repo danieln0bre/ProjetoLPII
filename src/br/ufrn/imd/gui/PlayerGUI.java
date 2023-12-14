@@ -113,7 +113,7 @@ public class PlayerGUI extends JPanel {
             String filePath = selectedDirectory + File.separator + selectedFile;
             System.out.println("Tocando Música:" + selectedFile);
             System.out.println("SongPath: " + filePath);
-            AudioPlayer audioPlayer = new AudioPlayer(filePath);
+            AudioPlayer audioPlayer = new AudioPlayer(filePath, false);
             audioPlayer.play();
         } else {
             System.out.println("Nenhum diretório ou arquivo selecionado.");
