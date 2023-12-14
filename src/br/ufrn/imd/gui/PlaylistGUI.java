@@ -2,17 +2,22 @@ package br.ufrn.imd.gui;
 
 import br.ufrn.imd.authentication.CommonUser;
 import br.ufrn.imd.authentication.User;
+import br.ufrn.imd.exceptions.PlaylistException;
+import br.ufrn.imd.filehandling.PlaylistFileHandler;
+import br.ufrn.imd.logic.AudioPlayer;
 import br.ufrn.imd.logic.PlaylistManager;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.ArrayList;
 
 public class PlaylistGUI extends JPanel implements ActionListener {
     private User user;
     private PlaylistManager playlistManager;
+    private AudioPlayer audioPlayer;
     private DefaultListModel<String> playlistListModel;
     private JList<String> playlistList;
 
@@ -25,18 +30,19 @@ public class PlaylistGUI extends JPanel implements ActionListener {
     private void initializeUI() {
         setLayout(new BorderLayout());
 
-        // Botão para carregar playlists
+        JButton playPlaylistButton = new JButton("Play Playlist");
+        playPlaylistButton.addActionListener(this::playPlaylist);
+        add(playPlaylistButton, BorderLayout.LINE_END);
+
         JButton loadPlaylistsButton = new JButton("Carregar Playlists");
         loadPlaylistsButton.addActionListener(this::loadPlaylists);
         add(loadPlaylistsButton, BorderLayout.NORTH);
 
-        // Lista de playlists
         playlistListModel = new DefaultListModel<>();
         playlistList = new JList<>(playlistListModel);
         JScrollPane scrollPane = new JScrollPane(playlistList);
         add(scrollPane, BorderLayout.CENTER);
 
-        // Botões para interações com a playlist
         JPanel buttonPanel = new JPanel(new GridLayout(1, 4));
 
         JButton createPlaylistButton = new JButton("Criar Playlist");
@@ -56,17 +62,14 @@ public class PlaylistGUI extends JPanel implements ActionListener {
         buttonPanel.add(deletePlaylistButton);
 
         add(buttonPanel, BorderLayout.SOUTH);
-
     }
 
     private void loadPlaylists(ActionEvent e) {
         ArrayList<String> userPlaylists = playlistManager.loadUserPlaylists(user);
 
         if (userPlaylists != null) {
-            // Limpa a lista antes de adicionar as novas playlists
             playlistListModel.clear();
 
-            // Adiciona as playlists à lista
             for (String playlist : userPlaylists) {
                 playlistListModel.addElement(playlist);
             }
@@ -80,7 +83,7 @@ public class PlaylistGUI extends JPanel implements ActionListener {
 
         if (playlistName != null && !playlistName.isEmpty()) {
             playlistManager.createPlaylist(user, playlistName);
-            loadPlaylists(null); // Atualiza a lista após criar uma nova playlist
+            loadPlaylists(null);
         }
     }
 
@@ -88,11 +91,30 @@ public class PlaylistGUI extends JPanel implements ActionListener {
         String selectedPlaylist = playlistList.getSelectedValue();
 
         if (selectedPlaylist != null) {
-            String newSong = JOptionPane.showInputDialog(this, "Digite o nome da nova música:");
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setDialogTitle("Escolha uma música");
+            fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 
-            if (newSong != null && !newSong.isEmpty()) {
-                playlistManager.addSongToPlaylist(user, selectedPlaylist, newSong);
-                loadPlaylists(null); // Atualiza a lista após adicionar uma nova música
+            int result = fileChooser.showOpenDialog(this);
+
+            if (result == JFileChooser.APPROVE_OPTION) {
+                File selectedFile = fileChooser.getSelectedFile();
+
+                if (selectedFile != null) {
+                    String filePath = selectedFile.getAbsolutePath();
+
+                    // Adiciona o endereço do arquivo ao PlaylistFileHandler
+                    try {
+                        PlaylistFileHandler playlistFileHandler = new PlaylistFileHandler("./files/"+user.getUsername()+"/playlists/"+selectedPlaylist);
+                        ArrayList<String> playlistData = playlistFileHandler.readData();
+                        playlistData.add(filePath);
+                        playlistFileHandler.writeData(playlistData);
+                        loadPlaylists(null);
+                    } catch (PlaylistException ex) {
+                        ex.printStackTrace();
+                        JOptionPane.showMessageDialog(this, "Erro ao adicionar música à playlist.", "Erro", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
             }
         } else {
             JOptionPane.showMessageDialog(this, "Selecione uma playlist para adicionar uma música.", "Erro", JOptionPane.ERROR_MESSAGE);
@@ -101,13 +123,13 @@ public class PlaylistGUI extends JPanel implements ActionListener {
 
     private void removeSongFromPlaylist(ActionEvent e) {
         String selectedPlaylist = playlistList.getSelectedValue();
-
+        System.out.println(selectedPlaylist);
         if (selectedPlaylist != null) {
             String songToRemove = JOptionPane.showInputDialog(this, "Digite o nome da música a ser removida:");
 
             if (songToRemove != null && !songToRemove.isEmpty()) {
                 playlistManager.removeSongFromPlaylist(user, selectedPlaylist, songToRemove);
-                loadPlaylists(null); // Atualiza a lista após remover uma música
+                loadPlaylists(null);
             }
         } else {
             JOptionPane.showMessageDialog(this, "Selecione uma playlist para remover uma música.", "Erro", JOptionPane.ERROR_MESSAGE);
@@ -116,18 +138,27 @@ public class PlaylistGUI extends JPanel implements ActionListener {
 
     private void deletePlaylist(ActionEvent e) {
         String selectedPlaylist = playlistList.getSelectedValue();
-
+        System.out.println(selectedPlaylist);
         if (selectedPlaylist != null) {
             int option = JOptionPane.showConfirmDialog(this, "Tem certeza de que deseja excluir a playlist selecionada?",
                     "Confirmação", JOptionPane.YES_NO_OPTION);
 
             if (option == JOptionPane.YES_OPTION) {
                 playlistManager.deletePlaylist(user, selectedPlaylist);
-                loadPlaylists(null); // Atualiza a lista após excluir uma playlist
+                loadPlaylists(null);
             }
         } else {
             JOptionPane.showMessageDialog(this, "Selecione uma playlist para excluir.", "Erro", JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+    private void playPlaylist(ActionEvent e) {
+    	String selectedPlaylist = playlistList.getSelectedValue();
+        this.audioPlayer = new AudioPlayer("./files/"+user.getUsername()+"/playlists/"+selectedPlaylist);
+        Thread playThread = new Thread(() -> {
+            audioPlayer.playPlaylist();
+        });
+        playThread.start();
     }
 
     @Override

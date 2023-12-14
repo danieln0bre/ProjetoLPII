@@ -31,8 +31,6 @@ public class PlaylistManager {
 
                 // Exemplo de escrita em um arquivo de playlist
                 ArrayList<String> playlistData = new ArrayList<>();
-                playlistData.add("Song 1");
-                playlistData.add("Song 2");
                 playlistFileHandler.writeData(playlistData);
 
                 System.out.println("Playlist created: " + playlistFilePath);
@@ -90,8 +88,11 @@ public class PlaylistManager {
     }
 
     public void deletePlaylist(User user, String playlistName) {
+    	System.out.println(playlistName);
         String playlistDirectoryPath = PLAYLIST_DIRECTORY_BASE + user.getUsername() + "/playlists/";
-        String playlistFilePath = playlistDirectoryPath + "playlist_" + playlistName + ".txt";
+        System.out.println(user.getUsername());
+        String playlistFilePath = playlistDirectoryPath + playlistName;
+        System.out.println(playlistFilePath);
 
         File playlistFile = new File(playlistFilePath);
         if (playlistFile.exists()) {
